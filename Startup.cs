@@ -148,6 +148,16 @@ namespace TradeHelper
 
             #endregion
 
+            #region ¾²Ì¬ÎÄ¼þ·ÃÎÊ
+
+            DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            defaultFilesOptions.DefaultFileNames.Clear();
+            defaultFilesOptions.DefaultFileNames.Add("index.html");
+            app.UseDefaultFiles(defaultFilesOptions);
+            app.UseStaticFiles();
+
+            #endregion
+
             app.UseRouting();
 
             app.UseAuthorization();

@@ -16,4 +16,14 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TradeHelper.Api.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\index.html" />
+  </ItemGroup>
+
 </Project>
