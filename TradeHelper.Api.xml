@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TradeHelper</name>
+    </assembly>
+    <members>
+        <member name="M:TradeHelper.Controllers.WeatherForecastController.Get">
+            <summary>
+            取得数据
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
