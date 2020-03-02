@@ -118,6 +118,20 @@ namespace TradeHelper
 
             #region 注册service
 
+            #region 跨域设置
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("any", builder =>
+            //    {
+            //        builder.AllowAnyOrigin() //允许任何来源的主机访问
+            //        .AllowAnyMethod()
+            //        .AllowAnyHeader()
+            //        .AllowCredentials();//指定处理cookie
+            //    });
+            //});
+
+            #endregion
+
             services.AddScoped<IAuthenticateService, TokenAuthenticationService>();
             services.AddScoped<IUserService, UserService>();
 
@@ -155,6 +169,18 @@ namespace TradeHelper
             defaultFilesOptions.DefaultFileNames.Add("index.html");
             app.UseDefaultFiles(defaultFilesOptions);
             app.UseStaticFiles();
+
+            #endregion
+
+            #region 跨域设置Cors
+
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+                //builder.WithOrigins("http://localhost:8080");
+                builder.AllowAnyOrigin();
+            });
 
             #endregion
 

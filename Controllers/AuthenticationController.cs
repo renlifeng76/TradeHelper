@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace TradeHelper.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("any")]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticateService _authService;
