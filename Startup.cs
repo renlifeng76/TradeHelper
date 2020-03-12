@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
+using TradeHelper.Dto;
 using TradeHelper.IService;
 using TradeHelper.Model;
 using TradeHelper.Service;
@@ -33,7 +36,25 @@ namespace TradeHelper
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            //services.AddControllers();
+
+            //.Net core3.0及以上通过安装 Microsoft.AspNetCore.Mvc.NewtonsoftJson  =>配置AddNewtonsoftJson() 支持基于 Newtonsoft.Json 的格式化程序和功能
+            //支持参数JObject
+            services.AddControllers().AddNewtonsoftJson().AddNewtonsoftJson(opt => {
+                opt.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+            }); 
+
+            //services.AddControllers().AddJsonOptions(options =>
+            //{
+
+            //    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+
+            //    // Use the default property (Pascal) casing.
+            //    //options.JsonSerializerOptions.PropertyNamingPolicy = null;
+
+            //    // Configure a custom converter.
+            //    //options.JsonSerializerOptions.Converters.Add(new MyCustomJsonConverter());
+            //});
 
             #region Jwt
 
@@ -116,8 +137,6 @@ namespace TradeHelper
             });
             #endregion
 
-            #region 注册service
-
             #region 跨域设置
             //services.AddCors(options =>
             //{
@@ -132,10 +151,13 @@ namespace TradeHelper
 
             #endregion
 
+            #region 注册service jwt登录认证处理
+
             services.AddScoped<IAuthenticateService, TokenAuthenticationService>();
             services.AddScoped<IUserService, UserService>();
 
             #endregion
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

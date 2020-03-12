@@ -10,5 +10,34 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:TradeHelper.CustomException.HttpResponseException">
+            <summary>
+            自定义异常类型
+            </summary>
+        </member>
+        <member name="M:TradeHelper.DbTools.FreeSqlFactory.GetIFreeSql(System.String,FreeSql.DataType,System.String)">
+            <summary>
+            取得IFreeSql
+            </summary>
+            <param name="strDbName">库名</param>
+            <param name="dateType">库类型</param>
+            <param name="strSegmentId">分库Id</param>
+            <returns></returns>
+        </member>
+        <member name="T:TradeHelper.Model.RlfConfig.AppConfig">
+            <summary>
+            项目配置数据
+            </summary>
+        </member>
+        <member name="T:TradeHelper.Model.RlfStock.Company">
+            <summary>
+            公司
+            </summary>
+        </member>
+        <member name="T:TradeHelper.Model.RlfStock.TradeLog">
+            <summary>
+            交易日志
+            </summary>
+        </member>
     </members>
 </doc>

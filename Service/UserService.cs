@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using TradeHelper.Dto;
 using TradeHelper.IService;
-using TradeHelper.Model;
 
 namespace TradeHelper.Service
 {
