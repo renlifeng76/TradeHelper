@@ -19,7 +19,6 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using TradeHelper.Dto;
 using TradeHelper.IService;
-using TradeHelper.Model;
 using TradeHelper.Service;
 
 namespace TradeHelper

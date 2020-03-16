@@ -15,6 +15,8 @@ TraderHelper-vue
 6.图片上传处理,vue引入vue-quill-editor,支持图片上传,剪切板粘贴图片上传处理
 7.NLog
 8.跨域
+9.IIS发布->除了绑定域名，要用IP/localhost访问，需编辑绑定-添加 空主机名+端口号
+10.FreeSql-》dll化，项目引入
 
 后续
 3.文件上传

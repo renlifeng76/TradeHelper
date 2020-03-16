@@ -4,39 +4,66 @@
         <name>TradeHelper</name>
     </assembly>
     <members>
+        <member name="T:TradeHelper.Controllers.CompanyController">
+            <summary>
+            上市公司
+            </summary>
+        </member>
+        <member name="M:TradeHelper.Controllers.CompanyController.Search(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            上市公司:检索
+            </summary>
+            <param name="jsonObj">{PerPageNum,CurPage,CompanyCode,PositionStatus,Tag}</param>
+            <returns>日志数据列表</returns>
+        </member>
+        <member name="T:TradeHelper.Controllers.PositionAnalysisController">
+            <summary>
+            持仓分析
+            </summary>
+        </member>
+        <member name="M:TradeHelper.Controllers.PositionAnalysisController.Search(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            持仓分析:检索
+            </summary>
+            <param name="jsonObj">{PerPageNum,CurPage,CompanyCode,PositionStatus}</param>
+            <returns>日志数据列表</returns>
+        </member>
+        <member name="M:TradeHelper.Controllers.TradeLogController.Search(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            交易日志:检索
+            </summary>
+            <param name="jsonObj">{PerPageNum,CurPage,CompanyCode,AgentType}</param>
+            <returns>日志数据列表</returns>
+        </member>
+        <member name="M:TradeHelper.Controllers.TradeLogController.SaveMemo(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            保存分析内容
+            </summary>
+            <param name="jsonObj">Id,Memo</param>
+            <returns></returns>
+        </member>
+        <member name="T:TradeHelper.Controllers.UploadController">
+            <summary>
+            文件上传
+            </summary>
+        </member>
         <member name="M:TradeHelper.Controllers.WeatherForecastController.Get">
             <summary>
             取得数据
             </summary>
             <returns></returns>
         </member>
+        <member name="M:TradeHelper.Core.HandlerHelper.GetValue(Newtonsoft.Json.Linq.JObject,System.String)">
+            <summary>
+            取得JObject属性值
+            </summary>
+            <param name="jsonObj"></param>
+            <param name="strPropName"></param>
+            <returns></returns>
+        </member>
         <member name="T:TradeHelper.CustomException.HttpResponseException">
             <summary>
             自定义异常类型
-            </summary>
-        </member>
-        <member name="M:TradeHelper.DbTools.FreeSqlFactory.GetIFreeSql(System.String,FreeSql.DataType,System.String)">
-            <summary>
-            取得IFreeSql
-            </summary>
-            <param name="strDbName">库名</param>
-            <param name="dateType">库类型</param>
-            <param name="strSegmentId">分库Id</param>
-            <returns></returns>
-        </member>
-        <member name="T:TradeHelper.Model.RlfConfig.AppConfig">
-            <summary>
-            项目配置数据
-            </summary>
-        </member>
-        <member name="T:TradeHelper.Model.RlfStock.Company">
-            <summary>
-            公司
-            </summary>
-        </member>
-        <member name="T:TradeHelper.Model.RlfStock.TradeLog">
-            <summary>
-            交易日志
             </summary>
         </member>
     </members>

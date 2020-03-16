@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Text.Json;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
+using System.Linq.Expressions;
+using FreeSqlDB.Model.RlfStock;
+using FreeSqlDB.Model.Tools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using TradeHelper.Core;
 using TradeHelper.CustomException;
-using TradeHelper.DbTools;
-using TradeHelper.Model;
-using TradeHelper.Model.RlfConfig;
-using TradeHelper.Model.RlfStock;
 
 namespace TradeHelper.Controllers
 {
@@ -31,30 +28,64 @@ namespace TradeHelper.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// 交易日志:检索
+        /// </summary>
+        /// <param name="jsonObj">{PerPageNum,CurPage,CompanyCode,AgentType}</param>
+        /// <returns>日志数据列表</returns>
         [HttpPost, Route("search")]
         public JsonResult Search(JObject jsonObj)
         {
-            //_logger.LogInformation("Search 开始运行");
+            //_logger.LogInformation("开始运行");
 
             AjaxRtnJsonData ajaxRtnJsonData = HandlerHelper.ActionWrap(() =>
             {
 
                 Dictionary<string, object> dictRtn = new Dictionary<string, object>();
 
-                string strPerPageNum = jsonObj["PerPageNum"].ToString();
-                string strCurPage = jsonObj["CurPage"].ToString();
+                string PerPageNum = HandlerHelper.GetValue(jsonObj, "PerPageNum");
+                string CurPage = HandlerHelper.GetValue(jsonObj, "CurPage");
+                string CompanyCode = HandlerHelper.GetValue(jsonObj, "CompanyCode"); 
+                string AgentType = HandlerHelper.GetValue(jsonObj, "AgentType");
+                string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
 
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
-                //var model = fsql.Select<TradeLog>()
-                //  .Where(t => t.Id == 1)
-                //  .ToOne();
+                //where 条件
+                Expression<Func<TradeLog, bool>> where = x=>true;
+
+                //证券代码
+                if(!string.IsNullOrEmpty(CompanyCode))
+                {
+                    where = where.And(x => x.CompanyCode == CompanyCode);
+                }
+                //委托方向
+                if(!string.IsNullOrEmpty(AgentType))
+                {
+                    where = where.And(x => x.AgentType == AgentType);
+                }
+                //标签
+                if (!string.IsNullOrEmpty(Tag))
+                {
+                    string[] array = Tag.Split(' ');
+
+                    Expression<Func<TradeLog, bool>> whereSub = x => x.Tag.Contains(array[0]);
+                    foreach (string one in array)
+                    {
+                        if (array[0].Equals(one))
+                        {
+                            continue;
+                        }
+                        whereSub = whereSub.Or(x => x.Tag.Contains(one));
+                    }
+                    where = where.And(whereSub);
+                }
 
                 var lstModel = fsql.Select<TradeLog>()
-                  //.Where(t => t.Id == 1)
+                  .Where(where)
                   .Count(out var total) //总记录数量
-                  .OrderBy("CompanyCode asc,AgentType asc,Id asc")
-                  .Page(int.Parse(strCurPage), int.Parse(strPerPageNum)).ToList();
+                  .OrderBy("tradetime desc")
+                  .Page(int.Parse(CurPage), int.Parse(PerPageNum)).ToList();
 
                 dictRtn.Add("gridData", lstModel);
 
@@ -64,120 +95,106 @@ namespace TradeHelper.Controllers
 
             });
 
-            //_logger.LogInformation("Search 结束运行");
+            //_logger.LogInformation("结束运行");
 
             return new JsonResult(ajaxRtnJsonData);
         }
 
-        [HttpPost, Route("uploadone")]
-        public JsonResult UploadOne(IFormFile file)
-        {
-
-            AjaxRtnJsonData ajaxRtnJsonData = HandlerHelper.ActionWrap(() =>
-            {
-
-                Dictionary<string, object> dictRtn = new Dictionary<string, object>();
-
-                //NLog.LogManager.GetLogger("rlf").Debug("参数:");
-                
-                if (file == null)
-                {
-                    var files = Request.Form.Files;
-                    if(files == null || files.Count <=0)
-                    {
-                        throw new BusinessException("参数为空！");
-                    }
-                    else
-                    {
-                        file = files[0];
-                    }
-                    
-                }
-                //if (jsonObj == null)
-                //{
-                //    throw new BusinessException("参数为空！");
-                //}
-
-                var fileDir = @"D:\uploadspace\image";
-
-                if (!Directory.Exists(fileDir))
-                {
-                    Directory.CreateDirectory(fileDir);
-                }
-
-                //文件名称
-                string strExt = Path.GetExtension(file.FileName).ToLower();
-                string projectFileName = Path.GetFileNameWithoutExtension(file.FileName) + "_" + System.DateTime.Now.ToString("yyyyMMddhhmmss") + strExt;
-
-                //上传的文件的路径
-                string filePath = fileDir + $@"\{projectFileName}";
-                using (FileStream fs = System.IO.File.Create(filePath))
-                {
-                    file.CopyTo(fs);
-                    fs.Flush();
-                }
-
-                string strImgPath = $"http://image.rlf99.com/image/{projectFileName}";
-                dictRtn.Add("FileUrl", strImgPath);
-
-                //文件类型
-                string strFileType = string.Empty;
-                if (strExt.IndexOf("jpg") > -1
-                || strExt.IndexOf("jpeg") > -1
-                || strExt.IndexOf("png") > -1)
-                {
-                    strFileType = "image";
-                }
-                if (strExt.IndexOf("mp4") > -1
-                || strExt.IndexOf("avi") > -1
-                || strExt.IndexOf("mpeg") > -1)
-                {
-                    strFileType = "video";
-                }
-                if (strExt.IndexOf("mp3") > -1
-                || strExt.IndexOf("wav") > -1
-                || strExt.IndexOf("m4a") > -1)
-                {
-                    strFileType = "audio";
-                }
-                dictRtn.Add("FileType", strFileType);
-
-                return dictRtn;
-
-            });
-
-            return new JsonResult(ajaxRtnJsonData);
-        }
-
+        /// <summary>
+        /// 保存分析内容
+        /// </summary>
+        /// <param name="jsonObj">Id,Memo</param>
+        /// <returns></returns>
         [HttpPost, Route("savememo")]
         public JsonResult SaveMemo(JObject jsonObj)
         {
-            //_logger.LogInformation("Search 开始运行");
+            //_logger.LogInformation("开始运行");
 
             AjaxRtnJsonData ajaxRtnJsonData = HandlerHelper.ActionWrap(() =>
             {
 
-                //保存备注
-                string strId = jsonObj["Id"].ToString();
-                string strMemo = jsonObj["Memo"].ToString();
+                //参数
+                string Id = HandlerHelper.GetValue(jsonObj, "Id"); 
+                string Memo = HandlerHelper.GetValue(jsonObj, "Memo");
 
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
-                TradeLog source = fsql.Select<TradeLog>().Where(t => t.Id == int.Parse(strId)).ToOne();
+                TradeLog source = fsql.Select<TradeLog>().Where(t => t.Id == int.Parse(Id)).ToOne();
 
-                source.Memo = strMemo;
+                source.Memo = Memo;
 
                 if (source != null)
                 {
                     fsql.Update<TradeLog>().SetSource(source).UpdateColumns(a => a.Memo).ExecuteAffrows();
                 }
-                
 
                 return null;
 
             });
 
-            //_logger.LogInformation("Search 结束运行");
+            //_logger.LogInformation("结束运行");
+
+            return new JsonResult(ajaxRtnJsonData);
+        }
+
+        [HttpPost, Route("saverow")]
+        public JsonResult SaveRow(JObject jsonObj)
+        {
+            //_logger.LogInformation("开始运行");
+
+            AjaxRtnJsonData ajaxRtnJsonData = HandlerHelper.ActionWrap(() =>
+            {
+                //参数
+                string Id = HandlerHelper.GetValue(jsonObj, "Id");
+
+                string TradeTime = HandlerHelper.GetValue(jsonObj, "TradeTime");
+                string CompanyCode = HandlerHelper.GetValue(jsonObj, "CompanyCode");
+                string CompanyName = HandlerHelper.GetValue(jsonObj, "CompanyName");
+                string AgentType = HandlerHelper.GetValue(jsonObj, "AgentType");
+                string AgentPrice = HandlerHelper.GetValue(jsonObj, "AgentPrice");
+                string TradeVol = HandlerHelper.GetValue(jsonObj, "TradeVol");
+                string TradePrice = HandlerHelper.GetValue(jsonObj, "TradePrice");
+                string TradeMkPlace = HandlerHelper.GetValue(jsonObj, "TradeMkPlace");
+                string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
+
+                //更新/插入
+                IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
+
+                TradeLog tradelog = null;
+
+                if (string.IsNullOrEmpty(Id))
+                {
+                    tradelog = new TradeLog();
+                }
+                else
+                {
+                    tradelog = fsql.Select<TradeLog>().Where(t => t.Id == int.Parse(Id, CultureInfo.CurrentCulture)).ToOne();
+                }
+
+                tradelog.TradeTime = Convert.ToDateTime(TradeTime, CultureInfo.CurrentCulture);
+                tradelog.CompanyCode = CompanyCode;
+                tradelog.CompanyName = CompanyName;
+                tradelog.AgentType = AgentType;
+                tradelog.AgentPrice = float.Parse(AgentPrice, CultureInfo.CurrentCulture); 
+                tradelog.TradeVol = int.Parse(TradeVol, CultureInfo.CurrentCulture);
+                tradelog.TradePrice = float.Parse(TradePrice, CultureInfo.CurrentCulture);
+                tradelog.TradeMkPlace = TradeMkPlace;
+                tradelog.Tag = Tag;
+
+                if (!string.IsNullOrEmpty(Id))
+                {
+                    fsql.Update<TradeLog>().SetSource(tradelog).ExecuteAffrows();
+                }
+                else
+                {
+                    fsql.Insert<TradeLog>(tradelog).ExecuteAffrows();
+                }
+
+                return null;
+
+            });
+
+            //_logger.LogInformation("结束运行");
 
             return new JsonResult(ajaxRtnJsonData);
         }

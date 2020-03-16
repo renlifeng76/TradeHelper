@@ -138,5 +138,25 @@ namespace TradeHelper.Core
 
         }
 
+        /// <summary>
+        /// 取得JObject属性值
+        /// </summary>
+        /// <param name="jsonObj"></param>
+        /// <param name="strPropName"></param>
+        /// <returns></returns>
+        public static string GetValue(JObject jsonObj,string strPropName)
+        {
+
+            string strRtn = string.Empty;
+
+            if(jsonObj != null && jsonObj[strPropName] != null)
+            {
+                strRtn = jsonObj[strPropName].ToString().Trim();
+            }
+
+            return strRtn;
+
+        }
+
     }
 }
