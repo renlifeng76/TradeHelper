@@ -146,20 +146,37 @@ namespace TradeHelper.Controllers
 
                 string CompanyCode = HandlerHelper.GetValue(jsonObj, "CompanyCode");
                 string CompanyName = HandlerHelper.GetValue(jsonObj, "CompanyName");
+                string CompanyType = HandlerHelper.GetValue(jsonObj, "CompanyType");
+                string HoldCompanyName = HandlerHelper.GetValue(jsonObj, "HoldCompanyName");
                 string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
 
                 //更新
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
-                Company company = fsql.Select<Company>().Where(t => t.Id == int.Parse(Id, CultureInfo.CurrentCulture)).ToOne();
+                Company model = null;
 
-                if (company != null)
+                if (string.IsNullOrEmpty(Id))
                 {
-                    company.CompanyCode = CompanyCode;
-                    company.CompanyName = CompanyName;
-                    company.Tag = Tag;
+                    model = new Company();
+                }
+                else
+                {
+                    model = fsql.Select<Company>().Where(t => t.Id == int.Parse(Id, CultureInfo.CurrentCulture)).ToOne();
+                }
 
-                    fsql.Update<Company>().SetSource(company).ExecuteAffrows();
+                model.CompanyCode = CompanyCode;
+                model.CompanyName = CompanyName;
+                model.CompanyType = CompanyType;
+                model.HoldCompanyName = HoldCompanyName;
+                model.Tag = Tag;
+
+                if (!string.IsNullOrEmpty(Id))
+                {
+                    fsql.Update<Company>().SetSource(model).ExecuteAffrows();
+                }
+                else
+                {
+                    fsql.Insert<Company>(model).ExecuteAffrows();
                 }
 
                 return null;

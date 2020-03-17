@@ -28,6 +28,39 @@
             <param name="jsonObj">{PerPageNum,CurPage,CompanyCode,PositionStatus}</param>
             <returns>日志数据列表</returns>
         </member>
+        <member name="M:TradeHelper.Controllers.PositionAnalysisController.SaveAnalysisContent(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            保存分析内容
+            </summary>
+            <param name="jsonObj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TradeHelper.Controllers.PositionAnalysisController.SaveRow(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            保存行
+            </summary>
+            <param name="jsonObj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TradeHelper.Controllers.StockArtController">
+            <summary>
+            证券文章
+            </summary>
+        </member>
+        <member name="M:TradeHelper.Controllers.StockArtController.Search(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            检索
+            </summary>
+            <param name="jsonObj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TradeHelper.Controllers.StockArtController.SaveArtContent(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            保存文章内容
+            </summary>
+            <param name="jsonObj"></param>
+            <returns></returns>
+        </member>
         <member name="M:TradeHelper.Controllers.TradeLogController.Search(Newtonsoft.Json.Linq.JObject)">
             <summary>
             交易日志:检索
