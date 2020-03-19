@@ -105,8 +105,8 @@ namespace TradeHelper.Controllers
         /// </summary>
         /// <param name="jsonObj">Id,Memo</param>
         /// <returns></returns>
-        [HttpPost, Route("savememo")]
-        public JsonResult SaveMemo(JObject jsonObj)
+        [HttpPost, Route("saveanalysiscontent")]
+        public JsonResult SaveAnalysisContent(JObject jsonObj)
         {
             //_logger.LogInformation("开始运行");
 
@@ -115,17 +115,17 @@ namespace TradeHelper.Controllers
 
                 //参数
                 string Id = HandlerHelper.GetValue(jsonObj, "Id"); 
-                string Memo = HandlerHelper.GetValue(jsonObj, "Memo");
+                string AnalysisContent = HandlerHelper.GetValue(jsonObj, "AnalysisContent");
 
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
-                TradeLog source = fsql.Select<TradeLog>().Where(t => t.Id == int.Parse(Id)).ToOne();
+                TradeLog source = fsql.Select<TradeLog>().Where(t => t.Id == int.Parse(Id, CultureInfo.CurrentCulture)).ToOne();
 
-                source.Memo = Memo;
+                source.AnalysisContent = AnalysisContent;
 
                 if (source != null)
                 {
-                    fsql.Update<TradeLog>().SetSource(source).UpdateColumns(a => a.Memo).ExecuteAffrows();
+                    fsql.Update<TradeLog>().SetSource(source).UpdateColumns(a => a.AnalysisContent).ExecuteAffrows();
                 }
 
                 return null;
@@ -151,8 +151,8 @@ namespace TradeHelper.Controllers
                 string CompanyCode = HandlerHelper.GetValue(jsonObj, "CompanyCode");
                 string CompanyName = HandlerHelper.GetValue(jsonObj, "CompanyName");
                 string AgentType = HandlerHelper.GetValue(jsonObj, "AgentType");
-                string AgentPrice = HandlerHelper.GetValue(jsonObj, "AgentPrice");
                 string TradeVol = HandlerHelper.GetValue(jsonObj, "TradeVol");
+                string TradePriceAverage = HandlerHelper.GetValue(jsonObj, "TradePriceAverage");
                 string TradePrice = HandlerHelper.GetValue(jsonObj, "TradePrice");
                 string TradeMkPlace = HandlerHelper.GetValue(jsonObj, "TradeMkPlace");
                 string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
@@ -175,9 +175,9 @@ namespace TradeHelper.Controllers
                 tradelog.CompanyCode = CompanyCode;
                 tradelog.CompanyName = CompanyName;
                 tradelog.AgentType = AgentType;
-                tradelog.AgentPrice = float.Parse(AgentPrice, CultureInfo.CurrentCulture); 
                 tradelog.TradeVol = int.Parse(TradeVol, CultureInfo.CurrentCulture);
                 tradelog.TradePrice = float.Parse(TradePrice, CultureInfo.CurrentCulture);
+                tradelog.TradePriceAverage = float.Parse(TradePriceAverage, CultureInfo.CurrentCulture);
                 tradelog.TradeMkPlace = TradeMkPlace;
                 tradelog.Tag = Tag;
 

@@ -68,7 +68,7 @@
             <param name="jsonObj">{PerPageNum,CurPage,CompanyCode,AgentType}</param>
             <returns>日志数据列表</returns>
         </member>
-        <member name="M:TradeHelper.Controllers.TradeLogController.SaveMemo(Newtonsoft.Json.Linq.JObject)">
+        <member name="M:TradeHelper.Controllers.TradeLogController.SaveAnalysisContent(Newtonsoft.Json.Linq.JObject)">
             <summary>
             保存分析内容
             </summary>
