@@ -154,6 +154,10 @@ namespace TradeHelper.Controllers
                 string TradeVol = HandlerHelper.GetValue(jsonObj, "TradeVol");
                 string TradePriceAverage = HandlerHelper.GetValue(jsonObj, "TradePriceAverage");
                 string TradePrice = HandlerHelper.GetValue(jsonObj, "TradePrice");
+                string Commission = HandlerHelper.GetValue(jsonObj, "Commission");
+                string TradeFees = HandlerHelper.GetValue(jsonObj, "TradeFees");
+                string StampTax = HandlerHelper.GetValue(jsonObj, "StampTax");
+                string TransferFees = HandlerHelper.GetValue(jsonObj, "TransferFees");
                 string TradeMkPlace = HandlerHelper.GetValue(jsonObj, "TradeMkPlace");
                 string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
 
@@ -176,8 +180,14 @@ namespace TradeHelper.Controllers
                 tradelog.CompanyName = CompanyName;
                 tradelog.AgentType = AgentType;
                 tradelog.TradeVol = int.Parse(TradeVol, CultureInfo.CurrentCulture);
-                tradelog.TradePrice = float.Parse(TradePrice, CultureInfo.CurrentCulture);
                 tradelog.TradePriceAverage = float.Parse(TradePriceAverage, CultureInfo.CurrentCulture);
+                tradelog.TradePrice = float.Parse(TradePrice, CultureInfo.CurrentCulture);
+
+                tradelog.Commission = float.Parse(Commission, CultureInfo.CurrentCulture);
+                tradelog.TradeFees = float.Parse(TradeFees, CultureInfo.CurrentCulture);
+                tradelog.StampTax = float.Parse(StampTax, CultureInfo.CurrentCulture);
+                tradelog.TransferFees = float.Parse(TransferFees, CultureInfo.CurrentCulture);
+
                 tradelog.TradeMkPlace = TradeMkPlace;
                 tradelog.Tag = Tag;
 
