@@ -18,9 +18,9 @@ namespace TradeHelper.Controllers
     public class UploadController : ControllerBase
     {
 
-        private readonly ILogger<TestController> _logger;
+        private readonly ILogger<UploadController> _logger;
 
-        public UploadController(ILogger<TestController> logger)
+        public UploadController(ILogger<UploadController> logger)
         {
             _logger = logger;
         }

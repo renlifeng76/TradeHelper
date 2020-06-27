@@ -21,9 +21,9 @@ namespace TradeHelper.Controllers
     public class TradeLogController : ControllerBase
     {
 
-        private readonly ILogger<TestController> _logger;
+        private readonly ILogger<TradeLogController> _logger;
 
-        public TradeLogController(ILogger<TestController> logger)
+        public TradeLogController(ILogger<TradeLogController> logger)
         {
             _logger = logger;
         }

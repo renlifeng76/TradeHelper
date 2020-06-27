@@ -22,9 +22,9 @@ namespace TradeHelper.Controllers
     public class CompanyController : ControllerBase
     {
 
-        private readonly ILogger<TestController> _logger;
+        private readonly ILogger<CompanyController> _logger;
 
-        public CompanyController(ILogger<TestController> logger)
+        public CompanyController(ILogger<CompanyController> logger)
         {
             _logger = logger;
         }

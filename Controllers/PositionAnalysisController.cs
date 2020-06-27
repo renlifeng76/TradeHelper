@@ -21,9 +21,9 @@ namespace TradeHelper.Controllers
     public class PositionAnalysisController : ControllerBase
     {
 
-        private readonly ILogger<TestController> _logger;
+        private readonly ILogger<PositionAnalysisController> _logger;
 
-        public PositionAnalysisController(ILogger<TestController> logger)
+        public PositionAnalysisController(ILogger<PositionAnalysisController> logger)
         {
             _logger = logger;
         }

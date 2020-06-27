@@ -24,9 +24,9 @@ namespace TradeHelper.Controllers
     public class StockArtController : ControllerBase
     {
 
-        private readonly ILogger<TestController> _logger;
+        private readonly ILogger<StockArtController> _logger;
 
-        public StockArtController(ILogger<TestController> logger)
+        public StockArtController(ILogger<StockArtController> logger)
         {
             _logger = logger;
         }

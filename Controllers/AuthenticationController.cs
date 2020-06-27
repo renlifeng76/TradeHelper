@@ -11,9 +11,10 @@ using TradeHelper.IService;
 
 namespace TradeHelper.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("any")]
+    [Route("api/[controller]")]
+    //[Route("[controller]")]
+    //[EnableCors("any")]  此行需要注释掉:否则阿里云服务器报错:500
     public class AuthenticationController : ControllerBase
     {
         private readonly ILogger<AuthenticationController> _logger;
