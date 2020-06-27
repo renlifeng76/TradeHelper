@@ -167,6 +167,19 @@ namespace TradeHelper
                 app.UseDeveloperExceptionPage();
             }
 
+            #region ¿çÓòÉèÖÃCors
+
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+                //builder.WithOrigins("http://localhost:8080");
+                builder.WithOrigins("http://localhost:49427");
+                builder.AllowAnyOrigin();
+            });
+
+            #endregion
+
             #region Swagger
             app.UseSwagger();
             app.UseSwaggerUI(options =>
@@ -193,17 +206,18 @@ namespace TradeHelper
 
             #endregion
 
-            #region ¿çÓòÉèÖÃCors
+            //#region ¿çÓòÉèÖÃCors
 
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyHeader();
-                builder.AllowAnyMethod();
-                //builder.WithOrigins("http://localhost:8080");
-                builder.AllowAnyOrigin();
-            });
+            //app.UseCors(builder =>
+            //{
+            //    builder.AllowAnyHeader();
+            //    builder.AllowAnyMethod();
+            //    //builder.WithOrigins("http://localhost:8080");
+            //    builder.WithOrigins("http://localhost:49427");
+            //    builder.AllowAnyOrigin();
+            //});
 
-            #endregion
+            //#endregion
 
             app.UseRouting();
 
