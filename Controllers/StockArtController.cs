@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq.Expressions;
 using FreeSqlDB.Model.RlfStock;
 using FreeSqlDB.Model.Tools;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ namespace TradeHelper.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     //[EnableCors("any")]
     public class StockArtController : ControllerBase
     {

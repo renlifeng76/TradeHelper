@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq.Expressions;
 using FreeSqlDB.Model.RlfStock;
 using FreeSqlDB.Model.Tools;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -16,7 +17,7 @@ namespace TradeHelper.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     //[EnableCors("any")]
     public class PositionAnalysisController : ControllerBase
     {

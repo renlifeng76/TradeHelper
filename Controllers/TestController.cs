@@ -13,7 +13,7 @@ namespace TradeHelper.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     //[EnableCors("any")]
     public class TestController : ControllerBase
     {
