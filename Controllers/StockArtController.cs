@@ -52,10 +52,17 @@ namespace TradeHelper.Controllers
                 string ArtTitle = HandlerHelper.GetValue(jsonObj, "ArtTitle"); 
                 string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
 
+                string UserId = HandlerHelper.GetValue(jsonObj, "UserId");
+
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
                 //where 条件
                 Expression<Func<StockArt, bool>> where = x=>true;
+
+                if (!string.IsNullOrEmpty(UserId))
+                {
+                    where = where.And(x => x.UserId == int.Parse(UserId));
+                }
 
                 //标题
                 if (!string.IsNullOrEmpty(ArtTitle))
@@ -159,6 +166,8 @@ namespace TradeHelper.Controllers
                 string ArtTitle = HandlerHelper.GetValue(jsonObj, "ArtTitle");
                 string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
 
+                string UserId = HandlerHelper.GetValue(jsonObj, "UserId");
+
                 //更新/插入
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
@@ -173,6 +182,7 @@ namespace TradeHelper.Controllers
                     model = fsql.Select<StockArt>().Where(t => t.Id == int.Parse(Id, CultureInfo.CurrentCulture)).ToOne();
                 }
 
+                model.UserId = int.Parse(UserId);
                 model.ArtTitle = ArtTitle;
                 model.Tag = Tag;
 

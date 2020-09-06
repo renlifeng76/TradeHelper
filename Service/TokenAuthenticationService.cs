@@ -21,11 +21,17 @@ namespace TradeHelper.Service
             _userService = userService;
             _tokenManagement = tokenManagement.Value;
         }
-        public bool IsAuthenticated(LoginRequestDTO request, out string token)
+        public bool IsAuthenticated(LoginRequestDTO request, out string token,out string userid)
         {
             token = string.Empty;
+            userid = string.Empty;
+
             if (!_userService.IsValid(request))
                 return false;
+
+            //用户Id
+            userid = _userService.GetUserId(request.Username).ToString();
+
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name,request.Username)

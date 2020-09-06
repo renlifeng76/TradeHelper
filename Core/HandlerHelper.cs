@@ -8,11 +8,11 @@ namespace TradeHelper.Core
     public class HandlerHelper
     {
 
-        public delegate Dictionary<string, object> dlgMethod(JObject jsonObj);
+        public delegate Dictionary<string, object> dlgMethod(string action,JObject jsonObj);
 
         public delegate Dictionary<string, object> dlgMethod1();
 
-        public static AjaxRtnJsonData ActionWrap(JObject jsonObj, dlgMethod dlg)
+        public static AjaxRtnJsonData ActionWrap(string action, JObject jsonObj, dlgMethod dlg)
         {
             //string strRtn = string.Empty;
 
@@ -21,17 +21,16 @@ namespace TradeHelper.Core
             try
             {
                 //WebLogHelper.WriteLog("ActionWrap start ");
-                //WebLogHelper.WriteLog("debug", context.Request.Cookies["UserIDFileCheck"].Value.ToString());
+                if(string.IsNullOrEmpty(action) || action.IndexOf("RequestToken") == -1)
+                {
+                    string UserId = HandlerHelper.GetValue(jsonObj, "UserId");
+                    if (string.IsNullOrEmpty(UserId))
+                    {
+                        throw new BusinessException("UserId为空！");
+                    }
+                }
 
-                //if (context.Request.Cookies["UserIDFileCheck"] == null
-                //|| string.IsNullOrEmpty(context.Request.Cookies["UserIDFileCheck"]))
-                //{
-
-                //    throw new BusinessExcption() { Value = "Token已过期！" };
-
-                //}
-
-                RtnJsonData.ResultData = dlg(jsonObj);
+                RtnJsonData.ResultData = dlg(action, jsonObj);
 
                 //WebLogHelper.WriteLog("ActionWrap end ");
 

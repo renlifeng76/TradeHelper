@@ -2,14 +2,21 @@
 
 namespace TradeHelper.CustomException
 {
-    public class BusinessException:Exception
+    public class BusinessException: BaseAppException
     {
 
-        public int Status { get; set; } = 500;
+        public BusinessException()
+    :       base()
+        {
 
-        public object Value { get; set; }
+        }
+        public BusinessException(string message)
+            : base(message)
+        {
 
-        public BusinessException(string strMsg )
+        }
+        public BusinessException(string message,Exception innerException)
+            : base(message, innerException)
         {
 
         }

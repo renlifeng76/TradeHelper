@@ -4,6 +4,6 @@ namespace TradeHelper.IService
 {
     public interface IAuthenticateService
     {
-        bool IsAuthenticated(LoginRequestDTO request, out string token);
+        bool IsAuthenticated(LoginRequestDTO request, out string token,out string userid);
     }
 }

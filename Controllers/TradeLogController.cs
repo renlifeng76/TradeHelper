@@ -39,6 +39,9 @@ namespace TradeHelper.Controllers
         {
             //_logger.LogInformation("开始运行");
 
+            string strAction = "Search";
+
+            //AjaxRtnJsonData ajaxRtnJsonData = HandlerHelper.ActionWrap(strAction, jsonObj,(strAction, jsonObj) =>
             AjaxRtnJsonData ajaxRtnJsonData = HandlerHelper.ActionWrap(() =>
             {
 
@@ -50,10 +53,17 @@ namespace TradeHelper.Controllers
                 string AgentType = HandlerHelper.GetValue(jsonObj, "AgentType");
                 string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
 
+                string UserId = HandlerHelper.GetValue(jsonObj,"UserId");
+
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
                 //where 条件
                 Expression<Func<TradeLog, bool>> where = x=>true;
+
+                if(!string.IsNullOrEmpty(UserId))
+                {
+                    where = where.And(x => x.UserId == int.Parse(UserId));
+                }
 
                 //证券代码
                 if(!string.IsNullOrEmpty(CompanyCode))
@@ -162,6 +172,8 @@ namespace TradeHelper.Controllers
                 string TradeMkPlace = HandlerHelper.GetValue(jsonObj, "TradeMkPlace");
                 string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
 
+                string UserId = HandlerHelper.GetValue(jsonObj, "UserId");
+
                 //更新/插入
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
@@ -176,6 +188,7 @@ namespace TradeHelper.Controllers
                     tradelog = fsql.Select<TradeLog>().Where(t => t.Id == int.Parse(Id, CultureInfo.CurrentCulture)).ToOne();
                 }
 
+                tradelog.UserId = int.Parse(UserId);
                 tradelog.TradeTime = Convert.ToDateTime(TradeTime, CultureInfo.CurrentCulture);
                 tradelog.CompanyCode = CompanyCode;
                 tradelog.CompanyName = CompanyName;

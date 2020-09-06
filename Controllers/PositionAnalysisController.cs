@@ -48,14 +48,21 @@ namespace TradeHelper.Controllers
                 string CurPage = HandlerHelper.GetValue(jsonObj, "CurPage"); 
                 string CompanyCode = HandlerHelper.GetValue(jsonObj, "CompanyCode");
                 string CompanyName = HandlerHelper.GetValue(jsonObj, "CompanyName");
-                string Tag = HandlerHelper.GetValue(jsonObj, "Tag"); 
+                string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
+
+                string UserId = HandlerHelper.GetValue(jsonObj, "UserId");
 
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
                 //where 条件
                 Expression<Func<PositionAnalysis, bool>> where = x=>true;
 
-                if(!string.IsNullOrEmpty(CompanyCode))
+                if (!string.IsNullOrEmpty(UserId))
+                {
+                    where = where.And(x => x.UserId == int.Parse(UserId));
+                }
+
+                if (!string.IsNullOrEmpty(CompanyCode))
                 {
                     where = where.And(x => x.CompanyCode == CompanyCode);
                 }
@@ -175,6 +182,8 @@ namespace TradeHelper.Controllers
                 string TradeMkPlace = HandlerHelper.GetValue(jsonObj, "TradeMkPlace");
                 string Tag = HandlerHelper.GetValue(jsonObj, "Tag");
 
+                string UserId = HandlerHelper.GetValue(jsonObj, "UserId");
+
                 //更新/插入
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
@@ -198,6 +207,7 @@ namespace TradeHelper.Controllers
                     }
                 }
 
+                model.UserId = int.Parse(UserId);
                 model.PositionStartTime = string.IsNullOrEmpty(PositionStartTime) ? (DateTime?)null : Convert.ToDateTime(PositionStartTime, CultureInfo.CurrentCulture);
                 model.PositionEndTime = string.IsNullOrEmpty(PositionEndTime) ? (DateTime?)null : Convert.ToDateTime(PositionEndTime, CultureInfo.CurrentCulture);
                 model.CompanyCode = CompanyCode;
