@@ -188,7 +188,7 @@ namespace TradeHelper.Controllers
                     tradelog = fsql.Select<TradeLog>().Where(t => t.Id == int.Parse(Id, CultureInfo.CurrentCulture)).ToOne();
                 }
 
-                tradelog.UserId = int.Parse(UserId);
+                //tradelog.UserId = int.Parse(UserId);
                 tradelog.TradeTime = Convert.ToDateTime(TradeTime, CultureInfo.CurrentCulture);
                 tradelog.CompanyCode = CompanyCode;
                 tradelog.CompanyName = CompanyName;
@@ -211,6 +211,11 @@ namespace TradeHelper.Controllers
                 }
                 else
                 {
+                    if (string.IsNullOrWhiteSpace(UserId))
+                    {
+                        throw new BusinessException("用户Id为空!");
+                    }
+                    tradelog.UserId = int.Parse(UserId);
                     fsql.Insert<TradeLog>(tradelog).ExecuteAffrows();
                 }
 

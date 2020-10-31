@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using TradeHelper.Core;
+using TradeHelper.CustomException;
 
 namespace TradeHelper.Controllers
 {
@@ -174,7 +175,7 @@ namespace TradeHelper.Controllers
                     model = fsql.Select<Company>().Where(t => t.Id == int.Parse(Id, CultureInfo.CurrentCulture)).ToOne();
                 }
 
-                model.UserId = int.Parse(UserId);
+                //model.UserId = int.Parse(UserId);
                 model.CompanyCode = CompanyCode;
                 model.CompanyName = CompanyName;
                 model.CompanyType = CompanyType;
@@ -187,6 +188,11 @@ namespace TradeHelper.Controllers
                 }
                 else
                 {
+                    if (string.IsNullOrWhiteSpace(UserId))
+                    {
+                        throw new BusinessException("用户Id为空!");
+                    }
+                    model.UserId = int.Parse(UserId);
                     fsql.Insert<Company>(model).ExecuteAffrows();
                 }
 

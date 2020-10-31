@@ -54,7 +54,7 @@ namespace TradeHelper.Controllers
                 //    throw new BusinessException("参数为空！");
                 //}
 
-                var fileDir = @"D:\uploadspace\image";
+                var fileDir = @"C:\rlf\uploadspace\image";
 
                 if (!Directory.Exists(fileDir))
                 {

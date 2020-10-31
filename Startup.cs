@@ -43,18 +43,6 @@ namespace TradeHelper
                 opt.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
             }); 
 
-            //services.AddControllers().AddJsonOptions(options =>
-            //{
-
-            //    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-
-            //    // Use the default property (Pascal) casing.
-            //    //options.JsonSerializerOptions.PropertyNamingPolicy = null;
-
-            //    // Configure a custom converter.
-            //    //options.JsonSerializerOptions.Converters.Add(new MyCustomJsonConverter());
-            //});
-
             #region Jwt
 
             services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
@@ -205,19 +193,6 @@ namespace TradeHelper
             app.UseStaticFiles();
 
             #endregion
-
-            //#region ¿çÓòÉèÖÃCors
-
-            //app.UseCors(builder =>
-            //{
-            //    builder.AllowAnyHeader();
-            //    builder.AllowAnyMethod();
-            //    //builder.WithOrigins("http://localhost:8080");
-            //    builder.WithOrigins("http://localhost:49427");
-            //    builder.AllowAnyOrigin();
-            //});
-
-            //#endregion
 
             app.UseRouting();
 

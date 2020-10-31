@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using TradeHelper.Core;
+using TradeHelper.CustomException;
 
 namespace TradeHelper.Controllers
 {
@@ -207,7 +208,7 @@ namespace TradeHelper.Controllers
                     }
                 }
 
-                model.UserId = int.Parse(UserId);
+                //model.UserId = int.Parse(UserId);
                 model.PositionStartTime = string.IsNullOrEmpty(PositionStartTime) ? (DateTime?)null : Convert.ToDateTime(PositionStartTime, CultureInfo.CurrentCulture);
                 model.PositionEndTime = string.IsNullOrEmpty(PositionEndTime) ? (DateTime?)null : Convert.ToDateTime(PositionEndTime, CultureInfo.CurrentCulture);
                 model.CompanyCode = CompanyCode;
@@ -224,6 +225,11 @@ namespace TradeHelper.Controllers
                 }
                 else
                 {
+                    if (string.IsNullOrWhiteSpace(UserId))
+                    {
+                        throw new BusinessException("用户Id为空!");
+                    }
+                    model.UserId = int.Parse(UserId);
                     fsql.Insert<PositionAnalysis>(model).ExecuteAffrows();
                 }
 

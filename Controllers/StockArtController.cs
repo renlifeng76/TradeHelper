@@ -182,7 +182,6 @@ namespace TradeHelper.Controllers
                     model = fsql.Select<StockArt>().Where(t => t.Id == int.Parse(Id, CultureInfo.CurrentCulture)).ToOne();
                 }
 
-                model.UserId = int.Parse(UserId);
                 model.ArtTitle = ArtTitle;
                 model.Tag = Tag;
 
@@ -192,6 +191,11 @@ namespace TradeHelper.Controllers
                 }
                 else
                 {
+                    if(string.IsNullOrWhiteSpace(UserId))
+                    {
+                        throw new BusinessException("用户Id为空!");
+                    }
+                    model.UserId = int.Parse(UserId);
                     fsql.Insert<StockArt>(model).ExecuteAffrows();
                 }
 
