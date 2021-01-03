@@ -57,7 +57,7 @@ namespace TradeHelper.Controllers
                 IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
 
                 //where 条件
-                Expression<Func<StockArt, bool>> where = x=>true;
+                Expression<Func<StockArt, bool>> where = x=>x.Deleted == 0;
 
                 if (!string.IsNullOrEmpty(UserId))
                 {
@@ -197,6 +197,44 @@ namespace TradeHelper.Controllers
                     }
                     model.UserId = int.Parse(UserId);
                     fsql.Insert<StockArt>(model).ExecuteAffrows();
+                }
+
+                return null;
+
+            });
+
+            //_logger.LogInformation("结束运行");
+
+            return new JsonResult(ajaxRtnJsonData);
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="jsonObj"></param>
+        /// <returns></returns>
+        [HttpPost, Route("delete")]
+        public JsonResult Delete(JObject jsonObj)
+        {
+            //_logger.LogInformation("开始运行");
+
+            AjaxRtnJsonData ajaxRtnJsonData = HandlerHelper.ActionWrap(() =>
+            {
+
+                //throw new BusinessException("asdfasdf");
+
+                //参数
+                string[] arrayId = HandlerHelper.GetValue(jsonObj, "Id").Split(',');
+
+                IFreeSql fsql = FreeSqlFactory.GetIFreeSql("rlfstock", FreeSql.DataType.Sqlite);
+
+                foreach(string Id in arrayId)
+                {
+                    StockArt source = fsql.Select<StockArt>().Where(t => t.Id == int.Parse(Id)).ToOne();
+
+                    source.Deleted = 1;
+
+                    fsql.Update<StockArt>().SetSource(source).UpdateColumns(a => a.Deleted).ExecuteAffrows();
                 }
 
                 return null;

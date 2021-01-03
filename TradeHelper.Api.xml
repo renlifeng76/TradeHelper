@@ -61,6 +61,13 @@
             <param name="jsonObj"></param>
             <returns></returns>
         </member>
+        <member name="M:TradeHelper.Controllers.StockArtController.Delete(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            删除
+            </summary>
+            <param name="jsonObj"></param>
+            <returns></returns>
+        </member>
         <member name="M:TradeHelper.Controllers.TradeLogController.Search(Newtonsoft.Json.Linq.JObject)">
             <summary>
             交易日志:检索
